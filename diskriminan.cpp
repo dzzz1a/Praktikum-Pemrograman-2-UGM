@@ -13,8 +13,10 @@ int main(){
     cin >> c;
     
     D = b*b - 4 * a * c;
-
-    if (D > 0) {
+    if (a == 0){
+        cout << "value of a can't be zero!";
+    }
+    else if (D > 0) {
         x1 = (-b - sqrt(D)) / (2 * a);
         x2 = (-b + sqrt(D)) / (2 * a);
         cout << "x1 = " << x1 << " and x2 = " << x2 << endl;
@@ -24,7 +26,7 @@ int main(){
         cout << "x = " << x << endl;
     } 
     else {
-        cout << "The roots are imaginary." << endl;
+        cout << "The roots are imaginary (complex)." << endl;
     }
 
     return 0;
