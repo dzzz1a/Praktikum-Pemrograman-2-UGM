@@ -1,0 +1,5 @@
+1 5 6 x1 = -3.000000 and x2 = -2.000000
+1 2 1 x = -1.000000
+1 2 3 The roots are imaginary (complex).
+0 1 4 value of a can't be zero!
+
