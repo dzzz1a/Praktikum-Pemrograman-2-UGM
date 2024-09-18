@@ -15,6 +15,10 @@ $(TARGET): $(SRC)
 test: $(TARGET)
 	./$(TARGET) test.txt
 
+# Run the program with user input
+run: $(TARGET)
+	./$(TARGET)
+
 # Clean up the compiled files
 clean:
 	rm -f $(TARGET)
