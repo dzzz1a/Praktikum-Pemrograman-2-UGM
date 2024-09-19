@@ -3,7 +3,6 @@ CXX = g++
 CXXFLAGS = -Wall
 TARGET = table
 SRC = table.cpp
-TESTCASE = testcase.txt
 
 # Default target: compile the program
 all: $(TARGET)
@@ -12,9 +11,9 @@ all: $(TARGET)
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
 
-# Run the program with input from testcase.txt
-test: $(TARGET) $(TESTCASE)
-	./$(TARGET) $(TESTCASE)
+# Run the program in test mode (using test.txt)
+test: $(TARGET)
+	./$(TARGET) test.txt
 
 # Run the program with user input
 run: $(TARGET)
@@ -25,4 +24,4 @@ clean:
 	rm -f $(TARGET)
 
 # Phony targets to avoid conflicts
-.PHONY: all clean test
+.PHONY: all clean test run
