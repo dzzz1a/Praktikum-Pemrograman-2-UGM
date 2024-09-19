@@ -2,51 +2,56 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 
-// Function to generate the multiplication table as a string
-std::string multiplicationTable(int n) {
-    std::string result;
-    int product;
-
+std::vector<std::string> generate_table(int n) {
+    std::vector<std::string> table;
     for (int i = 1; i <= 10; ++i) {
-        product = n * i;
-        result += std::to_string(n) + " x " + std::to_string(i) + " = " + std::to_string(product);
-        if (i != 10) { // Avoid adding a newline after the last line
-            result += "\n";
-        }
+        table.push_back(std::to_string(n) + " x " + std::to_string(i) + " = " + std::to_string(n * i));
     }
-
-    return result;
+    return table;
 }
 
-int main() {
-    std::ifstream testFile("test.txt");
-    int input;
-    std::string expected_output;
+int main(int argc, char* argv[]) {
+    if (argc > 1) {
+        // Test mode: file is passed as an argument
+        std::ifstream testFile(argv[1]);
+        if (!testFile) {
+            std::cerr << "Error: Could not open " << argv[1] << std::endl;
+            return 1;
+        }
 
-    if (!testFile) {
-        // If test file is not found, fallback to user input mode
-        std::cout << "Enter the value of n: ";
-        std::cin >> input;
-
-        // Generate and print the multiplication table
-        std::cout << multiplicationTable(input) << std::endl;
-        std::cout << "test passed" << std::endl;
-    } else {
-        // Test mode: read from the file and compare expected outputs
+        int input;
+        std::string line;
         int test_num = 1;
-        while (testFile >> input && std::getline(testFile >> std::ws, expected_output)) {
-            std::string output = multiplicationTable(input);
-            if (output == expected_output) {
-                std::cout << "Test " << test_num << " passed!" << std::endl;
-            } else {
-                std::cout << "Test " << test_num << " failed. Expected:\n\"" 
-                          << expected_output << "\", Got:\n\"" << output << "\"" << std::endl;
+
+        while (testFile >> input) {
+            testFile.ignore(); // Consume the newline after the number
+            auto generated_table = generate_table(input);
+
+            for (int i = 0; i < 10; ++i) {
+                std::getline(testFile, line);
+                if (line != generated_table[i]) {
+                    std::cout << "Test " << test_num << " failed. Expected: \"" << generated_table[i]
+                              << "\", Got: \"" << line << "\"" << std::endl;
+                } else {
+                    std::cout << "Test " << test_num << " passed!" << std::endl;
+                }
+                test_num++;
             }
-            test_num++;
         }
 
         testFile.close();
+    } else {
+        // User input mode
+        int n;
+        std::cout << "Enter a number: ";
+        std::cin >> n;
+
+        auto table = generate_table(n);
+        for (const auto& line : table) {
+            std::cout << line << std::endl;
+        }
     }
 
     return 0;
