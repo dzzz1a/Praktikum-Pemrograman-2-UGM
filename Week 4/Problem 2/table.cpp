@@ -1,30 +1,52 @@
 #include <iostream>
 #include <fstream>
-using namespace std;
+#include <string>
+#include <sstream>
 
-int main(int argc, char *argv[]) {
-    int i, n, m;
+// Function to generate the multiplication table as a string
+std::string multiplicationTable(int n) {
+    std::string result;
+    int product;
 
-    // Check if the input file is provided
-    if (argc != 2) {
-        cerr << "Usage: " << argv[0] << " <input file>" << endl;
-        return 1;
+    for (int i = 1; i <= 10; ++i) {
+        product = n * i;
+        result += std::to_string(n) + " x " + std::to_string(i) + " = " + std::to_string(product);
+        if (i != 10) { // Avoid adding a newline after the last line
+            result += "\n";
+        }
     }
 
-    // Open the input file
-    ifstream infile(argv[1]);
-    if (!infile) {
-        cerr << "Error: Could not open " << argv[1] << endl;
-        return 1;
-    }
+    return result;
+}
 
-    // Read the value of n from the file
-    infile >> n;
+int main() {
+    std::ifstream testFile("test.txt");
+    int input;
+    std::string expected_output;
 
-    // Generate and print the multiplication table for n
-    for (i = 1; i <= 10; i++) {
-        m = n * i;
-        cout << n << " x " << i << " = " << m << endl;
+    if (!testFile) {
+        // If test file is not found, fallback to user input mode
+        std::cout << "Enter the value of n: ";
+        std::cin >> input;
+
+        // Generate and print the multiplication table
+        std::cout << multiplicationTable(input) << std::endl;
+        std::cout << "test passed" << std::endl;
+    } else {
+        // Test mode: read from the file and compare expected outputs
+        int test_num = 1;
+        while (testFile >> input && std::getline(testFile >> std::ws, expected_output)) {
+            std::string output = multiplicationTable(input);
+            if (output == expected_output) {
+                std::cout << "Test " << test_num << " passed!" << std::endl;
+            } else {
+                std::cout << "Test " << test_num << " failed. Expected:\n\"" 
+                          << expected_output << "\", Got:\n\"" << output << "\"" << std::endl;
+            }
+            test_num++;
+        }
+
+        testFile.close();
     }
 
     return 0;
