@@ -1,66 +1,139 @@
 #include <iostream>
-#include <iomanip>
 #include <fstream>
-#include <string>
+#include <sstream>
+#include <iomanip>
+#include <vector>
 
 using namespace std;
 
-// Function to calculate and print the payslip
-void printPayslip(const string& name, int salary, int taxp, double installment, double insurance) {
-    double tax = salary * (static_cast<double>(taxp) / 100);
-    double net_salary = salary - tax - installment - insurance;
+struct Payslip {
+    string employeeName;
+    double grossSalary;
+    double taxPercent;
+    double installment;
+    double insurance;
 
-    cout << "Payslip for Employee: " << name << endl;
-    cout << "----------------------" << endl;
-    cout << "Gross Salary: Rp" << salary << endl;
-    cout << fixed << setprecision(2) << "Tax(" << taxp << "%): Rp" << tax << endl;
-    cout << "Installment: Rp" << installment << endl;
-    cout << "Insurance: Rp" << insurance << endl;
-    cout << "Net Salary: Rp" << net_salary << endl;
+    double calculateTax() const {
+        return grossSalary * (taxPercent / 100);
+    }
+
+    double calculateNetSalary() const {
+        return grossSalary - calculateTax() - installment - insurance;
+    }
+};
+
+// Function to collect generated payslip as a vector of strings
+vector<string> generatePayslip(const Payslip& payslip, bool printNetSalary = true) {
+    vector<string> output;
+
+    ostringstream oss;
+    oss << "Payslip for Employee: " << payslip.employeeName;
+    output.push_back(oss.str());
+    output.push_back("----------------------");
+
+    oss.str(""); // clear the stream
+    oss << fixed << setprecision(2);
+    oss << "Gross Salary: Rp" << payslip.grossSalary;
+    output.push_back(oss.str());
+
+    oss.str("");
+    // Check if the tax percent is a whole number (no decimal part)
+    if (payslip.taxPercent == static_cast<int>(payslip.taxPercent)) {
+        oss << "Tax(" << static_cast<int>(payslip.taxPercent) << "%): Rp" << payslip.calculateTax();
+    } else {
+        oss << "Tax(" << payslip.taxPercent << "%): Rp" << payslip.calculateTax();
+    }
+    output.push_back(oss.str());
+
+    oss.str("");
+    oss << "Installment: Rp" << payslip.installment;
+    output.push_back(oss.str());
+
+    oss.str("");
+    oss << "Insurance: Rp" << payslip.insurance;
+    output.push_back(oss.str());
+
+    if (printNetSalary) {
+        oss.str("");
+        oss << "Net Salary: Rp" << payslip.calculateNetSalary();
+        output.push_back(oss.str());
+    }
+
+    return output;
 }
 
 int main(int argc, char* argv[]) {
     if (argc > 1) {
-        // If a file is passed as an argument, read from the file (test mode)
+        // Test mode: read from file
         ifstream testFile(argv[1]);
         if (!testFile) {
-            cerr << "Error: Could not open " << argv[1] << endl;
+            cerr << "Error: Could not open file " << argv[1] << endl;
             return 1;
         }
 
-        string name;
-        int salary, taxp;
-        double installment, insurance;
+        string line;
+        int testNumber = 1;
 
-        int test_num = 1;
-        while (getline(testFile, name) && testFile >> salary >> taxp >> installment >> insurance) {
-            testFile.ignore(); // Ignore the newline after the insurance input
-            cout << "Test " << test_num << ":" << endl;
-            printPayslip(name, salary, taxp, installment, insurance);
-            cout << endl;
-            test_num++;
+        while (getline(testFile, line)) {
+            istringstream iss(line);
+            Payslip payslip;
+
+            // Extract employee name and fields
+            getline(iss, payslip.employeeName, ',');
+            iss >> payslip.grossSalary >> payslip.taxPercent >> payslip.installment >> payslip.insurance;
+
+            // Generate the payslip output
+            vector<string> actualOutput = generatePayslip(payslip);
+
+            // Read the expected output from the file
+            vector<string> expectedOutput;
+            while (getline(testFile, line) && !line.empty()) {
+                expectedOutput.push_back(line);
+            }
+
+            // Compare actual and expected output line by line
+            bool passed = true;
+            for (size_t i = 0; i < expectedOutput.size(); ++i) {
+                if (i >= actualOutput.size() || expectedOutput[i] != actualOutput[i]) {
+                    cout << "Test " << testNumber << ": Failed!" << endl;
+                    cout << "Expected: " << expectedOutput[i] << endl;
+                    cout << "Got: " << actualOutput[i] << endl;
+                    passed = false;
+                    break;
+                }
+            }
+
+            if (passed) {
+                cout << "Test " << testNumber << ": Passed!" << endl;
+            }
+
+            testNumber++;
         }
 
         testFile.close();
     } else {
-        // Otherwise, handle user input
-        string name;
-        int salary, taxp;
-        double installment, insurance;
+        // User input mode
+        Payslip payslip;
 
         cout << "Enter employee name: ";
-        getline(cin, name);
-        cout << "Enter employee salary: ";
-        cin >> salary;
-        cout << "Enter Tax Percentage (in percent): ";
-        cin >> taxp;
-        cout << "Enter employee installment: ";
-        cin >> installment;
-        cout << "Enter employee insurance: ";
-        cin >> insurance;
+        getline(cin, payslip.employeeName);
 
-        // Print the payslip
-        printPayslip(name, salary, taxp, installment, insurance);
+        cout << "Enter gross salary: ";
+        cin >> payslip.grossSalary;
+
+        cout << "Enter tax percentage: ";
+        cin >> payslip.taxPercent;
+
+        cout << "Enter installment: ";
+        cin >> payslip.installment;
+
+        cout << "Enter insurance: ";
+        cin >> payslip.insurance;
+
+        vector<string> payslipOutput = generatePayslip(payslip);
+        for (const string& line : payslipOutput) {
+            cout << line << endl;
+        }
     }
 
     return 0;
