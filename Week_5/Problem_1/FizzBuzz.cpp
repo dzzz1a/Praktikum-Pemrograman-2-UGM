@@ -9,7 +9,7 @@ int main() {
     int i;
     
     for (i = 0; i < 100; i++) {
-        if (i % 3 == 0 && i % 5 == 0) {
+        if ((i+1) % 3 == 0 && (i+1) % 5 == 0) {
             List[i] = "FizzBuzz";
         } 
         else if ((i + 1) % 3 == 0) {
