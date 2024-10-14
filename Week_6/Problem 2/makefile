@@ -2,8 +2,8 @@
 # Variables
 CXX = g++
 CXXFLAGS = -Wall
-TARGET = p1
-SRC = p1.cpp
+TARGET = p2
+SRC = p2.cpp
 
 # Default target: compile the program
 all: $(TARGET)
