@@ -3,26 +3,26 @@
 using namespace std;
 
 struct Student {
-    int id;
+    long int id;
     string name;
     int score;
 };
 
 void SelectionSort(Student arr[], int n, int c) {
     for (int i = 0; i < n - 1; i++) {
-        int minIndex = i;
+        int maxIndex = i;
 
         for (int j = i + 1; j < n; j++) {
-            if ((c == 1 && arr[j].id < arr[minIndex].id) || 
-                (c == 3 && arr[j].score < arr[minIndex].score)) {
-                minIndex = j;
+            if ((c == 1 && arr[j].id > arr[maxIndex].id) || 
+                (c == 3 && arr[j].score > arr[maxIndex].score)) {
+                maxIndex = j;
             }
         }
 
-        if (minIndex != i) {
+        if (maxIndex != i) {
             Student temp = arr[i];
-            arr[i] = arr[minIndex];
-            arr[minIndex] = temp;
+            arr[i] = arr[maxIndex];
+            arr[maxIndex] = temp;
         }
     }
 }
