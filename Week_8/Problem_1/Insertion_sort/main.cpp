@@ -3,7 +3,7 @@
 using namespace std;
 
 struct Student {
-    int id;
+    lomg int id;
     string name;
     int score;
 };
@@ -13,7 +13,7 @@ void InsertionSort(Student arr[], int n, int c) {
         Student key = arr[i];
         int j = i - 1;
 
-        while (j >= 0 && ((c == 1 && arr[j].id > key.id) || (c == 3 && arr[j].score > key.score))) {
+        while (j >= 0 && ((c == 1 && arr[j].id < key.id) || (c == 3 && arr[j].score < key.score))) {
             arr[j + 1] = arr[j];
             j = j - 1;
         }
@@ -39,15 +39,12 @@ int main() {
     };
     int n = 7;
 
-    cout << "Original array:\n";
-    PrintArray(arr, n);
-
     InsertionSort(arr, n, 1);
-    cout << "\nArray sorted by column 1 (ID):\n";
+    cout << "\nArray sorted by ID:\n";
     PrintArray(arr, n);
 
     InsertionSort(arr, n, 3);
-    cout << "\nArray sorted by column 3 (Score):\n";
+    cout << "\nArray sorted by Score:\n";
     PrintArray(arr, n);
 
     return 0;
