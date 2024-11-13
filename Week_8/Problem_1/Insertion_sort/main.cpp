@@ -35,7 +35,7 @@ int main() {
         {9970272750, "Achmad Yaumil Fadjri R.", 60},
         {9970293945, "Alivia Rahma Pramesti", 70},
         {9952382180, "Ari Lutfianto", 65},
-        {9965653989, "Unknown", 60}
+        {9965653989, "Arief Budiman", 60}
     };
     int n = 7;
 
