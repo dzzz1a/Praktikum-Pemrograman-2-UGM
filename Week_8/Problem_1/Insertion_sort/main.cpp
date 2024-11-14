@@ -3,7 +3,7 @@
 using namespace std;
 
 struct Student {
-    lomg int id;
+    long int id;
     string name;
     int score;
 };
