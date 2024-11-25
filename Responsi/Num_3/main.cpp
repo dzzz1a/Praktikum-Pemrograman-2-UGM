@@ -30,7 +30,7 @@ int main() {
         }
     }
 
-    cout << "The sum of odd numbers is: " << o << endl;
-    cout << "The sum of even numbers is: " << e << endl;
+    cout << "The count of odd numbers is: " << o << endl;
+    cout << "The count of even numbers is: " << e << endl;
     return 0;
 }
