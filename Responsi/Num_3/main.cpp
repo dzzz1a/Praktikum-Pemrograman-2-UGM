@@ -5,7 +5,7 @@ int main() {
     int n = 5;
     int s[n] = {1, 2, 3, 4, 5}, e = 0, o = 0;
     char m;
-    cout << "Do you want a hardcoded input and output? (y/n): ";
+    cout << "Do you want a hardcoded input? (y/n): ";
     cin >> m;
     if (m == 'n') {
         int n;
