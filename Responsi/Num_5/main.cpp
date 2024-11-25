@@ -5,7 +5,7 @@ using namespace std;
 int main() {
     string s = "buwung";
     char m;
-    cout << "Do you want a hardcoded input and output? (y/n): ";
+    cout << "Do you want a hardcoded input? (y/n): ";
     cin >> m;
     if (m == 'n') {
         cout << "Enter a string: ";
