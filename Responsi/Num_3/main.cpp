@@ -7,8 +7,7 @@ int main() {
     char m;
     cout << "Do you want a hardcoded input? (y/n): ";
     cin >> m;
-    if (m == 'n') {
-        int n;
+    if (m == 'n') { // if the user chose to input, the initial value of s will be overwrited
         cout << "Enter the size of array: ";
         cin >> n;
         for (int i = 0; i < n; i++) {
@@ -17,6 +16,12 @@ int main() {
         }
     }
     
+    cout << endl << "The array is: [";
+    for (int i = 0; i < n; i++){
+        cout << s[i] << ",";
+    }
+    cout << "]" << endl; // To make it clear what array being counted
+
     for (int i = 0; i < n; i++) {
         if (s[i] % 2 == 0) {
             e++;
